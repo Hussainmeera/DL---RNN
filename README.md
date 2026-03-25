@@ -3,38 +3,23 @@
 ## AIM
 To develop a Recurrent Neural Network (RNN) model for predicting stock prices using historical closing price data.
 
-## Problem Statement and Dataset
-<img width="665" height="615" alt="image" src="https://github.com/user-attachments/assets/7f988cd6-7ba0-4113-a769-008f848b5ab4" />
-
-<img width="581" height="675" alt="image" src="https://github.com/user-attachments/assets/1ce32ae1-be03-4410-9287-d6129a2776d5" />
+## Theory
+A Recurrent Neural Network (RNN) is a type of deep learning model designed to handle sequential data, such as time series like stock prices. It processes previous inputs through loops, allowing it to capture temporal dependencies and patterns over time. When used for stock price prediction, the RNN analyzes historical price data to learn trends and make future price estimates. Its ability to remember information across sequences makes it suitable for modeling the dynamic and seasonal nature of stock markets. Overall, RNNs help improve forecast accuracy by leveraging past data to inform future predictions.
 
 
 ## DESIGN STEPS
-### STEP 1: 
 
-Load and normalize data, create sequences.
+1. Collect historical stock closing price data.
 
-### STEP 2: 
+2. Normalize the data using Min–Max scaling.
 
-Convert data to tensors and set up DataLoader.
+3. Create time-series sequences (e.g., past 60 days → next day).
 
-### STEP 3: 
+4. Split the data into training and testing sets.
 
-Define the RNN model architecture
+5. Build and train the RNN/LSTM model.
 
-### STEP 4: 
-
-Summarize, compile with loss and optimizer.
-
-### STEP 5: 
-
-Train the model with loss tracking.
-
-### STEP 6: 
-
-Predict on test data, plot actual vs. predicted prices.
-
-
+6. Predict future prices and evaluate performance (MSE/RMSE).
 
 
 ## PROGRAM
@@ -43,7 +28,7 @@ Predict on test data, plot actual vs. predicted prices.
 
 ### Register Number: 212224230155
 
-```
+```python
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
@@ -96,14 +81,14 @@ train_loader = DataLoader(train_dataset, batch_size=64, shuffle=True)
 
 ## Step 2: Define RNN Model
 class RNNModel(nn.Module):
-  def __init__(self,input_size=1,hidden_size=64,num_layers=2,output_size=1):
-    super(RNNModel, self).__init__()
-    self.rnn = nn.RNN(input_size, hidden_size, num_layers, batch_first=True)
-    self.fc = nn.Linear(hidden_size, output_size)
-  def forward(self, x):
-    out,_=self.rnn(x)
-    out=self.fc(out[:,-1,:])
-    return out  
+    def __init__(self,input_size=1,hidden_size=64,num_layer=2,output_size=1):
+        super(RNNModel,self).__init__()
+        self.rnn= nn.RNN(input_size,hidden_size,num_layer,batch_first=True)
+        self.fc = nn.Linear(hidden_size,output_size)
+    def forward(self,x):
+        out,_=self.rnn(x)
+        out=self.fc(out[:,-1,:])
+        return out
 
 model = RNNModel()
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
@@ -120,7 +105,7 @@ criterion = nn.MSELoss()
 optimizer = torch.optim.Adam(model.parameters(), lr=0.001)
 
 ## Step 3: Train the Model
-# Training loop
+
 def train_model(model, train_loader, criterion, optimizer, epochs=20):
   train_losses = []
   model.train()
@@ -137,14 +122,14 @@ def train_model(model, train_loader, criterion, optimizer, epochs=20):
     train_losses.append(total_loss / len(train_loader))
     print(f"Epoch [{epoch+1} / {epochs}], Loss: {total_loss / len(train_loader):.4f}")  
   print('Name: Meera Hussain A')
-  print('Register Number: 212224230155 ')  
+  print('Register Number: 212224230155')  
   plt.plot(train_losses, label='Training Loss')
   plt.xlabel('Epoch')
   plt.ylabel('MSE Loss')
   plt.title('Training Loss Over Epochs')
   plt.legend()
   plt.show()
-train_model(model, train_loader, criterion, optimizer)  
+train_model(model, train_loader, criterion, optimizer)
 
 ## Step 4: Make Predictions on Test Set
 model.eval()
@@ -157,8 +142,8 @@ predicted_prices = scaler.inverse_transform(predicted)
 actual_prices = scaler.inverse_transform(actual)
 
 # Plot the predictions vs actual prices
-print('Name:Meera Hussain A')
-print('Register Number:212224230155')
+print('Name: Meera Hussain A')
+print('Register Number: 212224230155')
 plt.figure(figsize=(10, 6))
 plt.plot(actual_prices, label='Actual Price')
 plt.plot(predicted_prices, label='Predicted Price')
@@ -169,6 +154,7 @@ plt.legend()
 plt.show()
 print(f'Predicted Price: {predicted_prices[-1]}')
 print(f'Actual Price: {actual_prices[-1]}')
+
 
 ```
 
@@ -184,8 +170,6 @@ print(f'Actual Price: {actual_prices[-1]}')
 ## Prediction 
 <img width="492" height="49" alt="image" src="https://github.com/user-attachments/assets/725c10b8-d12c-4f37-afa2-7e4d3ffe0927" />
 
-### Predictions
-Include the predictions on test data
 
 ## RESULT
 Thus, a Recurrent Neural Network (RNN) model for predicting stock prices using historical closing price data has been developed successfully.
